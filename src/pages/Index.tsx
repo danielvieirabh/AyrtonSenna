@@ -13,6 +13,18 @@ const Index = () => {
       </Helmet>
       <main className="bg-background">
         <HeroSection />
+        
+        {/* Placeholder section to demonstrate scroll */}
+        <section className="min-h-screen flex items-center justify-center px-6">
+          <div className="text-center max-w-3xl">
+            <h2 className="font-display text-4xl md:text-6xl text-foreground mb-6">
+              A JORNADA CONTINUA
+            </h2>
+            <p className="font-body text-muted-foreground text-lg leading-relaxed">
+              Mais conteúdo em breve...
+            </p>
+          </div>
+        </section>
       </main>
     </>
   );
