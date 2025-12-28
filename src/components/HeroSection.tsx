@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import * as THREE from "three";
 
 // Imagens
@@ -8,6 +9,7 @@ import cr7Robo from "@/assets/cr7robo.png";
 const HeroSection = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [isRobotMode, setIsRobotMode] = useState(false);
+  const { ref, isVisible } = useScrollAnimation();
   
   const revealValueRef = useRef(0); 
   const targetRevealRef = useRef(0);
@@ -150,7 +152,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-black text-white">
+    <section ref={ref} className="relative h-screen w-full overflow-hidden bg-black text-white">
       
       {/* 1. BACKGROUND SVG (Linhas Douradas) */}
       <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
@@ -166,7 +168,7 @@ const HeroSection = () => {
       <div ref={mountRef} className="absolute inset-0 z-10" />
 
       {/* 4. BOTÃO LATERAL (TOGGLE MODE) */}
-      <div className="absolute right-6 top-1/2 -translate-y-1/2 z-50 md:right-12">
+      <div className={`absolute right-6 top-1/2 -translate-y-1/2 z-50 md:right-12 transition-all duration-1000 delay-500 ease-out ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-20"}`}>
         <button
           onClick={() => setIsRobotMode(!isRobotMode)}
           className={`group flex h-64 w-24 flex-col items-center justify-between rounded-2xl border transition-all duration-500 backdrop-blur-sm
@@ -219,7 +221,7 @@ const HeroSection = () => {
       </div>
 
       {/* 5. WIDGET INFERIOR ESQUERDO (Next Match) */}
-      <div className="absolute bottom-8 left-6 z-20 md:left-12">
+      <div className={`absolute bottom-8 left-6 z-20 md:left-12 transition-all duration-1000 delay-700 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"}`}>
         <div className="flex h-48 w-40 flex-col justify-between rounded-t-xl border border-[#D4AF37]/30 bg-black/80 p-4 backdrop-blur-md shadow-2xl">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37]">

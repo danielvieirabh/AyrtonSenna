@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { ArrowRight, Trophy } from "lucide-react"; // Certifique-se de ter lucide-react instalado ou use ícones similares
 import cr7Normal from "@/assets/cr7normal.png"; // Exemplo, mantenha seus imports
 import cr72002 from "@/assets/2002.jpg";
@@ -72,6 +73,7 @@ const TimelineSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
+  const { ref: animRef, isVisible } = useScrollAnimation({ threshold: 0.1 });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -99,7 +101,10 @@ const TimelineSection = () => {
       ref={sectionRef} 
       className="relative h-[400vh] bg-black text-white" 
     >
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center">
+      <div 
+        ref={animRef}
+        className={`sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center transition-all duration-1000 ease-out ${isVisible ? "opacity-100" : "opacity-0"}`}
+      >
         
         {/* --- Background Elements (Linhas Técnicas) --- */}
         <div className="absolute inset-0 pointer-events-none opacity-20">

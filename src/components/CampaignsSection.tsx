@@ -1,4 +1,5 @@
 import React from 'react';
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import nike from "@/assets/nike.png";
 import herbalife from "@/assets/herbalife.png";
 import clear from "@/assets/clear.png";
@@ -26,6 +27,8 @@ const brands = [
 ];
 
 const CampaignsSection: React.FC = () => {
+  const { ref, isVisible } = useScrollAnimation();
+
   return (
     <section className="relative overflow-hidden bg-black py-24 md:py-32">
       
@@ -34,7 +37,10 @@ const CampaignsSection: React.FC = () => {
            style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '20px 20px' }} 
       />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div 
+        ref={ref}
+        className={`container mx-auto px-6 relative z-10 transition-all duration-1000 ease-out ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+      >
         
         {/* 2. HEADER COM TIPOGRAFIA "LANDO STYLE" */}
         <div className="relative mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
