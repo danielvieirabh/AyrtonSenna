@@ -11,6 +11,7 @@ import CustomCursor from "@/components/CustomCursor";
 import PageTransition from "@/components/PageTransition";
 import Header from "@/components/Header";
 import Preloader from "@/components/Preloader";
+import AudioPlayer from "@/components/AudioPlayer";
 
 
 const queryClient = new QueryClient();
@@ -20,12 +21,6 @@ const App = () => {
 
   const handleLoadComplete = () => {
     setIsLoading(false);
-    
-    // Reproduz o som "Siuuu" ou Estádio
-    // Certifique-se de adicionar o arquivo 'siuuu.mp3' na pasta 'public' do projeto
-    const audio = new Audio("/siuuu.mp3");
-    audio.volume = 0.4; // Volume sutil (0.0 a 1.0)
-    audio.play().catch((e) => console.log("Áudio automático bloqueado pelo navegador:", e));
   };
 
   return (
@@ -40,6 +35,7 @@ const App = () => {
           ) : (
             <>
               <CustomCursor />
+              <AudioPlayer />
               <BrowserRouter>
                 <Header />
                 <PageTransition />
