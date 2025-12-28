@@ -2,8 +2,10 @@ import HeroSection from "@/components/HeroSection";
 import StatsSection from "@/components/StatsSection";
 import TrophiesSection from "@/components/TrophiesSection";
 import GallerySection from "@/components/GallerySection";
+import TimelineSection from "@/components/TimelineSection";
 import VideoSection from "@/components/VideoSection";
 import QuotesSection from "@/components/QuotesSection";
+import CampaignsSection from "@/components/CampaignsSection";
 import FooterSection from "@/components/FooterSection";
 import { Helmet } from "react-helmet-async";
 
@@ -20,9 +22,11 @@ const Index = () => {
       <main className="bg-background">
         <HeroSection />
         <StatsSection />
+        <TimelineSection />
         <TrophiesSection />
         <GallerySection />
         <QuotesSection />
+        <CampaignsSection />
         <VideoSection />
         <FooterSection />
       </main>
