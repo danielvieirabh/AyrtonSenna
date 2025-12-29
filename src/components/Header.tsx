@@ -1,6 +1,6 @@
 import React from "react";
 
-// --- 1. Ícone da Sacola (SVG Original do Lando Norris) ---
+// --- 1. Ícone da Sacola ---
 const LandoStoreIcon = () => (
   <svg 
     width="18" 
@@ -19,7 +19,50 @@ const LandoStoreIcon = () => (
   </svg>
 );
 
-// --- 2. Componente de Botão Animado (Texto Deslizante) ---
+// --- 2. Ícone de Kart Animado (NOVO) ---
+const KartIcon = () => (
+  <div className="relative group cursor-pointer">
+    <svg 
+      width="60" 
+      height="30" 
+      viewBox="0 0 60 30" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg" 
+      // CLASSE ATUALIZADA:
+      // 1. animate-drive: Faz ele tremer (motor ligado)
+      // 2. hover:animate-[spin_0.6s_linear_infinite]: Faz girar rápido no hover
+      // 3. transition-colors: Suaviza a troca de cor
+      className="text-black opacity-20 transition-all duration-300 
+                 hover:opacity-100 hover:text-primary 
+                 animate-drive hover:animate-[spin_0.6s_linear_infinite]"
+    >
+       <path d="M15 12H8V20H15V12Z" fill="currentColor"/>
+       <path d="M52 12H45V20H52V12Z" fill="currentColor"/>
+       <path d="M4 18H56" stroke="currentColor" strokeWidth="2"/>
+       <path d="M20 18L24 8H36L40 18" stroke="currentColor" strokeWidth="2"/>
+       {/* Capacete (Detalhe) */}
+       <circle cx="30" cy="10" r="4" fill="currentColor" />
+       {/* Chassi */}
+       <rect x="2" y="22" width="56" height="2" fill="currentColor" />
+    </svg>
+
+    {/* Keyframes customizados injetados localmente */}
+    <style>{`
+      @keyframes drive {
+        0% { transform: translate(0px, 0px); }
+        25% { transform: translate(1px, -1px); }
+        50% { transform: translate(-1px, 0px); }
+        75% { transform: translate(0px, 1px); }
+        100% { transform: translate(0px, 0px); }
+      }
+      .animate-drive {
+        animation: drive 0.2s infinite linear;
+      }
+    `}</style>
+  </div>
+);
+
+// --- 3. Componente de Botão Animado (Store) ---
 interface LandoButtonProps {
   text: string;
   icon?: React.ComponentType;
@@ -30,22 +73,17 @@ const LandoButton = ({ text, icon: Icon, onClick }: LandoButtonProps) => {
   return (
     <button 
       onClick={onClick}
-      className="group relative flex items-center gap-3 overflow-hidden rounded-full bg-[#D4AF37] px-6 py-3 font-bold text-black transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(212,175,55,0.3)]"
+      className="group relative flex items-center gap-4 overflow-hidden rounded-full bg-primary px-8 py-4 font-bold text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_8px_30px_rgba(228,21,6,0.3)] hover:shadow-[0_10px_40px_rgba(228,21,6,0.5)]"
     >
-      {/* Ícone com leve rotação no hover */}
       <div className="relative z-10 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110">
-        {Icon && <Icon />}
+        {Icon && <div className="scale-125"><Icon /></div>}
       </div>
-
-      {/* Container de Texto Deslizante (Máscara) */}
-      <div className="relative h-5 w-16 overflow-hidden">
+      <div className="relative h-6 w-20 overflow-hidden">
         <div className="absolute top-0 flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:-translate-y-1/2">
-          {/* Texto Original */}
-          <span className="flex h-5 items-center justify-start text-sm font-bold uppercase tracking-wider">
+          <span className="flex h-6 items-center justify-start text-base font-black uppercase tracking-widest">
             {text}
           </span>
-          {/* Texto Cópia (que sobe e substitui o original) */}
-          <span className="flex h-5 items-center justify-start text-sm font-bold uppercase tracking-wider text-black">
+          <span className="flex h-6 items-center justify-start text-base font-black uppercase tracking-widest text-[#FCD116]">
             {text}
           </span>
         </div>
@@ -54,43 +92,41 @@ const LandoButton = ({ text, icon: Icon, onClick }: LandoButtonProps) => {
   );
 };
 
-// --- 3. Componente de Menu Hamburguer Animado ---
+// --- 4. Componente de Menu Hamburguer Animado ---
 const LandoMenuButton = () => {
   return (
-    <button className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/5 backdrop-blur-md transition-all hover:bg-white/10 hover:border-[#D4AF37]">
+    <button className="group relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-black/5 bg-white/60 backdrop-blur-xl transition-all duration-300 hover:bg-white hover:border-primary hover:shadow-[0_0_25px_rgba(0,0,0,0.1)] hover:scale-105">
       <div className="flex flex-col gap-1.5 transition-all duration-300 group-hover:rotate-180">
-        <span className="h-0.5 w-6 bg-white transition-all duration-300 group-hover:w-4 group-hover:translate-x-1"></span>
-        <span className="h-0.5 w-6 bg-white"></span>
-        <span className="h-0.5 w-6 bg-white transition-all duration-300 group-hover:w-4 group-hover:-translate-x-1"></span>
+        <span className="h-0.5 w-7 bg-black transition-all duration-300 group-hover:w-5 group-hover:translate-x-1 group-hover:bg-primary rounded-full"></span>
+        <span className="h-0.5 w-7 bg-black group-hover:bg-primary transition-colors rounded-full"></span>
+        <span className="h-0.5 w-7 bg-black transition-all duration-300 group-hover:w-5 group-hover:-translate-x-1 group-hover:bg-primary rounded-full"></span>
       </div>
     </button>
   );
 };
 
-// --- 4. Componente Principal do Header ---
+// --- 5. Componente Principal do Header ---
 const Header = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-start justify-between px-6 py-6 md:px-12 pointer-events-none">
       
-      {/* Esquerda: Nome do Cristiano */}
-      <div className="flex flex-col font-serif font-bold leading-tight tracking-tight pointer-events-auto">
-        <span className="text-3xl md:text-5xl text-white">CRISTIANO</span>
-        <span className="text-3xl md:text-5xl text-[#D4AF37]">RONALDO</span>
+      {/* Esquerda: Nome do Ayrton Senna */}
+      <div className="flex flex-col font-display font-bold leading-[0.85] tracking-tighter pointer-events-auto select-none">
+        <span className="text-3xl md:text-5xl text-black">AYRTON</span>
+        <span className="text-3xl md:text-5xl text-primary italic pr-1">SENNA</span>
       </div>
 
-      {/* Centro: Logo CR7 */}
+      {/* Centro: Ícone de Kart Animado */}
       <div className="absolute left-1/2 -translate-x-1/2 top-8 pointer-events-auto">
-        <span className="font-sans text-2xl font-black italic tracking-tighter text-[#D4AF37]">
-          CR7
-        </span>
+         <KartIcon />
       </div>
 
       {/* Direita: Botões Animados */}
       <div className="flex items-center gap-4 pointer-events-auto">
         <LandoButton 
-          text="STORE" 
+          text="CART" 
           icon={LandoStoreIcon} 
-          onClick={() => console.log("Open Store")}
+          onClick={() => console.log("Open Cart")}
         />
         <LandoMenuButton />
       </div>

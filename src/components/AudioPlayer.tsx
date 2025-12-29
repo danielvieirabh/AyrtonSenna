@@ -68,7 +68,7 @@ const AudioPlayer = () => {
         onClick={toggleAudio}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`group relative flex h-12 items-center overflow-hidden rounded-full border border-white/10 bg-black/60 backdrop-blur-md transition-all duration-500 ease-out hover:border-[#D4AF37]/50 hover:bg-black/80 ${
+        className={`group relative flex h-12 items-center overflow-hidden rounded-full border border-black/10 bg-white/60 backdrop-blur-md transition-all duration-500 ease-out hover:border-primary/50 hover:bg-white/80 ${
           isHovered || isPlaying ? "w-40 px-4" : "w-12 justify-center"
         }`}
       >
@@ -77,7 +77,7 @@ const AudioPlayer = () => {
           {[1, 2, 3, 4].map((bar) => (
             <div
               key={bar}
-              className={`w-1 rounded-full bg-[#D4AF37] transition-all duration-300 ${
+              className={`w-1 rounded-full bg-primary transition-all duration-300 ${
                 isPlaying ? "animate-music-bar" : "h-1 opacity-50"
               }`}
               style={{
@@ -94,14 +94,14 @@ const AudioPlayer = () => {
             isHovered || isPlaying ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
           }`}
         >
-          <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-white">
+          <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-black">
             {isPlaying ? "Sound On" : "Sound Off"}
           </span>
         </div>
 
         {/* Ícone Fallback se não estiver expandido (Opcional, mas bom para UX) */}
         <div className={`absolute right-3.5 transition-opacity duration-300 ${isHovered || isPlaying ? 'opacity-0' : 'opacity-100'}`}>
-           {isPlaying ? <Volume2 size={16} className="text-[#D4AF37]" /> : <VolumeX size={16} className="text-gray-500" />}
+           {isPlaying ? <Volume2 size={16} className="text-primary" /> : <VolumeX size={16} className="text-gray-500" />}
         </div>
       </button>
 

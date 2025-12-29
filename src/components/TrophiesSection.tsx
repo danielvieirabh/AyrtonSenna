@@ -1,34 +1,36 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useRef, useState, useEffect } from "react";
-import { Instagram, Twitter, Trophy, Star, Dribbble, Crown } from "lucide-react";
+import { Instagram, Twitter, Trophy, Star, Flag, MonitorPlay, Crown } from "lucide-react";
 
-// Importe suas imagens do CR7 aqui
-import cr7Img1 from "@/assets/imagescr7/mtu.jpg";
-import cr7Img2 from "@/assets/imagescr7/semcamisa.png";
-import cr7Img3 from "@/assets/imagescr7/lenda.jpg";
-import cr7Img4 from "@/assets/imagescr7/lendarioreal.jpg";
-import cr7Img5 from "@/assets/imagescr7/medalha.jpg";
-import cr7Img6 from "@/assets/imagescr7/costas.jpg";
-import cr7Img7 from "@/assets/imagescr7/factos.jpg";
-import cr7Img8 from "@/assets/imagescr7/trofeu.jpg";
+// Imagens do Senna
+import sennaCampeao from "@/assets/carreirasenna/campeao.jpg";
+import sennaMclaren from "@/assets/carreirasenna/mclaren.jpg";
+import sennaAmarelo from "@/assets/carreirasenna/sennaamerlo.jpg";
+import sennaAzul from "@/assets/carreirasenna/sennaazul.jpg";
+import sennaVitoria from "@/assets/carreirasenna/sennacampeao.jpg";
+import sennaLotus from "@/assets/carreirasenna/sennacarropreto.jpg";
+import sennaXuxa from "@/assets/carreirasenna/sennaexuxa.jpg";
+import sennaGalisteu from "@/assets/carreirasenna/sennagalisteu.jpg";
+import sennaPreto from "@/assets/carreirasenna/sennapreto.jpg";
+import sennaFone from "@/assets/carreirasenna/sennaefone.jpg";
 
-// --- NOVO COMPONENTE: ÍCONE ANIMADO QUE MUDA ---
+// --- ÍCONE ANIMADO QUE MUDA (Racing Theme) ---
 const AnimatedSocialIcon = () => {
   const [index, setIndex] = useState(0);
 
-  // Lista de ícones que vão ficar alternando
+  // Ícones de Corrida
   const icons = [
-    <Dribbble key="ball" size={50} strokeWidth={1.5} />, // Bola
-    <Instagram key="insta" size={50} strokeWidth={1.5} />, // Instagram
+    <Flag key="flag" size={50} strokeWidth={1.5} />, // Bandeira Chegada
     <Trophy key="trophy" size={50} strokeWidth={1.5} />, // Troféu
-    <Twitter key="twitter" size={50} strokeWidth={1.5} />, // Twitter
-    <Crown key="crown" size={50} strokeWidth={1.5} />, // Coroa (King)
+    <Star key="star" size={50} strokeWidth={1.5} />, // Estrela
+    <MonitorPlay key="tv" size={50} strokeWidth={1.5} />, // TV/Mídia
+    <Crown key="crown" size={50} strokeWidth={1.5} />, // Rei de Mônaco
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % icons.length);
-    }, 2500); // Muda a cada 2.5 segundos
+    }, 2500); 
 
     return () => clearInterval(interval);
   }, [icons.length]);
@@ -36,69 +38,91 @@ const AnimatedSocialIcon = () => {
   return (
     <div className="absolute -top-20 left-1/2 -translate-x-1/2 flex justify-center items-center w-20 h-20">
       <div 
-        key={index} // A chave muda para forçar a reinicialização da animação CSS
-        className="text-[#D4AF37] animate-float-fade"
+        key={index} 
+        // Cor primária (Vermelho McLaren)
+        className="text-primary animate-float-fade"
       >
         {icons[index]}
       </div>
       
-      {/* Círculo decorativo sutil atrás */}
-      <div className="absolute inset-0 border border-[#D4AF37]/20 rounded-full animate-pulse-slow" />
+      {/* Círculo decorativo */}
+      <div className="absolute inset-0 border border-primary/20 rounded-full animate-pulse-slow" />
     </div>
   );
 };
 
-// --- Configuração dos Cards ---
+// --- Configuração dos Cards (Senna Moments) ---
 const cardsConfig = [
   {
-    image: cr7Img7,
+    image: sennaLotus, // Carro Preto (Lotus)
     transform: "translate(-32rem, 9rem) rotate(-24deg) scale(0.75)",
     zIndex: 1,
-    caption: "Facts",
-    date: "Statement",
+    caption: "The Beginning",
+    date: "Lotus Era",
   },
   {
-    image: cr7Img6,
+    image: sennaMclaren, // McLaren
     transform: "translate(-24rem, 5rem) rotate(-16deg) scale(0.82)",
     zIndex: 2,
-    caption: "Siuuu",
-    date: "Signature Move",
+    caption: "Dominance",
+    date: "MP4/4 Machine",
   },
   {
-    image: cr7Img4,
+    image: sennaCampeao, // Segurando Troféu
     transform: "translate(-12rem, 1.5rem) rotate(-8deg) scale(0.92)",
     zIndex: 3,
-    caption: "Real Madrid",
-    date: "Glory Days",
+    caption: "Champion",
+    date: "World Title",
   },
   {
-    image: cr7Img3,
+    image: sennaAmarelo, // Capacete Amarelo (Icônico)
     transform: "translate(0rem, 0rem) rotate(0deg) scale(1)",
     zIndex: 10,
-    caption: "THE GOAT",
-    date: "Legendary",
+    caption: "THE LEGEND",
+    date: "Forever",
     isCenter: true,
   },
   {
-    image: cr7Img5,
+    image: sennaVitoria, // Comemorando
     transform: "translate(12rem, 1.5rem) rotate(8deg) scale(0.92)",
     zIndex: 3,
-    caption: "Champion",
-    date: "Winner Mentality",
+    caption: "Victory",
+    date: "Interlagos",
   },
   {
-    image: cr7Img8,
+    image: sennaFone, // Focado
     transform: "translate(24rem, 5rem) rotate(16deg) scale(0.82)",
     zIndex: 2,
-    caption: "Collector",
-    date: "Another One",
+    caption: "Focus",
+    date: "Mental Strength",
   },
   {
-    image: cr7Img2,
+    image: sennaAzul, // Nacional
     transform: "translate(32rem, 9rem) rotate(24deg) scale(0.75)",
     zIndex: 1,
-    caption: "Physique",
-    date: "Hard Work",
+    caption: "National Hero",
+    date: "Brasil",
+  },
+  {
+    image: sennaPreto, 
+    transform: "translate(12rem, 2.5rem) rotate(8deg) scale(0.88)",
+    zIndex: 4,
+    caption: "Intense",
+    date: "The Look",
+  },
+   {
+    image: sennaXuxa, 
+    transform: "translate(-32rem, 10rem) rotate(-22deg) scale(0.75)",
+    zIndex: 2,
+    caption: "Icon Status",
+    date: "Celebrity",
+  },
+  {
+    image: sennaGalisteu, 
+    transform: "translate(-12rem, 2.5rem) rotate(-8deg) scale(0.88)",
+    zIndex: 4,
+    caption: "Off Track",
+    date: "Personal Life",
   },
 ];
 
@@ -151,7 +175,8 @@ const SocialCard = ({ image, transform, zIndex, caption, date, isCenter }: Socia
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={handleMouseLeave}
-        className={`relative w-full h-full rounded-2xl overflow-hidden bg-black border border-white/10 shadow-2xl cursor-pointer ${isCenter ? 'shadow-[#D4AF37]/20' : ''}`}
+        // Bordas e sombras ajustadas para tema branco/vermelho
+        className={`relative w-full h-full rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-2xl cursor-pointer ${isCenter ? 'shadow-primary/20 ring-1 ring-primary/20' : ''}`}
         style={{
           transformStyle: 'preserve-3d',
           transform: isHovered 
@@ -160,15 +185,17 @@ const SocialCard = ({ image, transform, zIndex, caption, date, isCenter }: Socia
           transition: isHovered ? 'transform 0.1s ease-out' : 'transform 0.5s ease-out',
         }}
       >
+        {/* Imagem de Fundo (Blur/Grayscale) */}
         <div className="w-full h-full transition-transform duration-[750ms] ease-[cubic-bezier(0.65,0.05,0,1)] group-hover:scale-110">
           <img
             src={image}
             alt={caption}
-            className="w-full h-full object-cover grayscale opacity-60 transition-opacity duration-[750ms]"
-            style={{ opacity: isHovered ? 0 : 0.6 }}
+            className="w-full h-full object-cover grayscale opacity-90 transition-opacity duration-[750ms]"
+            style={{ opacity: isHovered ? 0 : 0.9 }}
           />
         </div>
 
+        {/* Imagem Colorida (Reveal no Hover) */}
         <div 
           className="absolute inset-0 w-full h-full transition-all duration-[750ms] ease-[cubic-bezier(0.65,0.05,0,1)]"
           style={{
@@ -181,21 +208,24 @@ const SocialCard = ({ image, transform, zIndex, caption, date, isCenter }: Socia
             alt={caption}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
+          {/* Gradiente escuro embaixo para texto aparecer */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90" />
         </div>
 
+        {/* Texto do Card */}
         <div className="absolute bottom-0 left-0 right-0 p-6 z-20 text-center">
            <div className={`transition-all duration-500 ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-              <div className="flex justify-center gap-2 mb-2 text-[#D4AF37]">
+              <div className="flex justify-center gap-2 mb-2 text-primary">
                  <Instagram size={16} />
                  <Twitter size={16} />
               </div>
-              <h3 className="font-display text-2xl text-white uppercase">{caption}</h3>
-              <p className="font-sans text-xs text-gray-400 tracking-widest uppercase mt-1">{date}</p>
+              <h3 className="font-display text-2xl text-white uppercase italic">{caption}</h3>
+              <p className="font-sans text-xs text-gray-300 tracking-widest uppercase mt-1">{date}</p>
            </div>
         </div>
 
-        <div className={`absolute inset-0 border-2 border-[#D4AF37] rounded-2xl transition-opacity duration-300 pointer-events-none ${isHovered ? 'opacity-100' : 'opacity-0'}`} />
+        {/* Borda Vermelha no Hover */}
+        <div className={`absolute inset-0 border-2 border-primary rounded-2xl transition-opacity duration-300 pointer-events-none ${isHovered ? 'opacity-100' : 'opacity-0'}`} />
       </div>
     </div>
   );
@@ -206,7 +236,7 @@ const SocialsStackSection = () => {
 
   return (
     <section className="relative py-20 bg-background overflow-hidden min-h-[700px] flex items-start justify-center">
-      {/* INJEÇÃO DE CSS para animação do ícone */}
+      {/* CSS para animação do ícone */}
       <style>{`
         @keyframes float-fade {
           0% { opacity: 0; transform: translateY(10px) scale(0.8); }
@@ -226,30 +256,33 @@ const SocialsStackSection = () => {
         }
       `}</style>
 
-      <div className="absolute inset-0 opacity-5 pointer-events-none" 
-           style={{ backgroundImage: 'radial-gradient(#D4AF37 1px, transparent 1px)', backgroundSize: '30px 30px' }} 
+      {/* Grid de Fundo Sutil */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '30px 30px' }} 
       />
 
       <div className="container mx-auto px-4 relative z-10 mt-16">
         
-        {/* Header Modificado com Ícone Animado */}
+        {/* Header da Seção */}
         <div 
           ref={ref}
           className={`relative text-center mb-6 md:mb-10 transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
         >
-          {/* AQUI ESTÁ O ÍCONE ANIMADO EM CIMA DO TEXTO */}
+          {/* Ícone Animado */}
           <AnimatedSocialIcon />
 
-          <h2 className="font-serif text-5xl md:text-7xl text-foreground">
-            WHAT'S UP<br />
-            <span className="italic text-[#D4AF37]">ON SOCIALS</span>
+          <h2 className="font-display text-5xl md:text-7xl text-foreground uppercase tracking-tighter">
+            RACING<br />
+            <span className="italic text-primary">LEGACY</span>
           </h2>
         </div>
 
-        {/* Container do Leque */}
-        <div className="relative w-full h-[550px] flex justify-center items-start pt-12 scale-[0.45] md:scale-[0.65] lg:scale-[0.85] xl:scale-100 transition-transform duration-500 hover:scale-[0.48] md:hover:scale-[0.68] lg:hover:scale-[0.88] xl:hover:scale-105">
+        {/* Leque de Cards */}
+        <div className={`relative w-full h-[550px] flex justify-center items-start pt-12 scale-[0.45] md:scale-[0.65] lg:scale-[0.85] xl:scale-100 transition-all duration-1000 ease-out delay-300 hover:scale-[0.48] md:hover:scale-[0.68] lg:hover:scale-[0.88] xl:hover:scale-105 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-20"
+          }`}>
            <div className="relative w-full max-w-[100px]">
               {cardsConfig.map((card, index) => (
                 <SocialCard 
