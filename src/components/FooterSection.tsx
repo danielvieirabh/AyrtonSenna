@@ -2,7 +2,7 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Instagram, Twitter, Youtube, Facebook, ArrowUpRight } from "lucide-react";
 
 // --- IMPORTS DAS IMAGENS ---
-import airtoncapacete from "@/assets/airtoncomcapacete.png"; 
+import airtoncapacete from "@/assets/olagramasenna.png"; 
 import pasta from "@/assets/pasta.svg"; 
 
 const FooterSection = () => {
