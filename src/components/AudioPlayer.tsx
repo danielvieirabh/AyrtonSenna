@@ -1,120 +1,155 @@
 import { useState, useEffect, useRef } from "react";
-import { Volume2, VolumeX } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 
 const AudioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Cria o elemento de áudio
-    audioRef.current = new Audio("/siu.mp3"); // Certifique-se que o arquivo existe
-    audioRef.current.loop = true; // Para música de fundo, o loop é ideal
-    audioRef.current.volume = 0.0; // Começa mudo para fazer o fade-in
+    // Inicializa o áudio
+    audioRef.current = new Audio("/ayrton.mp3"); // Verifique o caminho
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.4; // Volume inicial
 
+    // Eventos para atualizar a barra de progresso
+    const setAudioData = () => {
+      setDuration(audioRef.current?.duration || 0);
+    };
+
+    const setAudioTime = () => {
+      setCurrentTime(audioRef.current?.currentTime || 0);
+    };
+
+    // Adiciona Listeners
+    audioRef.current.addEventListener("loadeddata", setAudioData);
+    audioRef.current.addEventListener("timeupdate", setAudioTime);
+
+    // Cleanup
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
+        audioRef.current.removeEventListener("loadeddata", setAudioData);
+        audioRef.current.removeEventListener("timeupdate", setAudioTime);
         audioRef.current = null;
       }
     };
   }, []);
 
-  // Função para fazer Fade In/Out suave do volume
-  const fadeAudio = (targetVolume: number, duration: number, onComplete?: () => void) => {
-    if (!audioRef.current) return;
-    
-    const startVolume = audioRef.current.volume;
-    const change = targetVolume - startVolume;
-    const startTime = performance.now();
-
-    const animateScroll = (currentTime: number) => {
-      if (!audioRef.current) return;
-      
-      const elapsed = currentTime - startTime;
-      const amount = Math.min(elapsed / duration, 1); // 0 a 1
-      
-      audioRef.current.volume = startVolume + (change * amount);
-
-      if (amount < 1) {
-        requestAnimationFrame(animateScroll);
-      } else {
-        if (onComplete) onComplete();
-      }
-    };
-
-    requestAnimationFrame(animateScroll);
+  // Formata segundos em MM:SS
+  const formatTime = (time: number) => {
+    if (isNaN(time)) return "00:00";
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
-  const toggleAudio = () => {
+  // Função de Play/Pause
+  const togglePlay = () => {
     if (!audioRef.current) return;
 
     if (isPlaying) {
+      audioRef.current.pause();
       setIsPlaying(false);
-      // Fade out antes de pausar
-      fadeAudio(0, 500, () => audioRef.current?.pause());
     } else {
-      setIsPlaying(true);
       audioRef.current.play().catch((e) => console.error("Erro autoplay:", e));
-      // Fade in ao iniciar
-      fadeAudio(0.3, 500); // Volume final 0.3 (agradável para background)
+      setIsPlaying(true);
     }
   };
 
+  // Função para pular o tempo (Seek)
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!audioRef.current) return;
+    const newTime = parseFloat(e.target.value);
+    audioRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
+  };
+
+  // Função Mute
+  const toggleMute = () => {
+    if (!audioRef.current) return;
+    audioRef.current.muted = !isMuted;
+    setIsMuted(!isMuted);
+  };
+
   return (
-    <div className="fixed bottom-8 right-8 z-50 flex items-center gap-2">
-      {/* Container Principal */}
-      <button
-        onClick={toggleAudio}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        className={`group relative flex h-12 items-center overflow-hidden rounded-full border border-black/10 bg-white/60 backdrop-blur-md transition-all duration-500 ease-out hover:border-primary/50 hover:bg-white/80 ${
-          isHovered || isPlaying ? "w-40 px-4" : "w-12 justify-center"
-        }`}
+    <div 
+      className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-2"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Player Container */}
+      <div 
+        className={`group relative flex items-center overflow-hidden rounded-2xl border border-white/20 bg-black/80 backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] shadow-2xl
+          ${isHovered || isPlaying ? "w-[320px] h-16 p-4" : "w-12 h-12 justify-center cursor-pointer"}
+        `}
+        // Se estiver fechado e clicar, abre e dá play
+        onClick={!isHovered && !isPlaying ? togglePlay : undefined}
       >
-        {/* Equalizador Animado (Visualizer) */}
-        <div className="flex items-center gap-1">
-          {[1, 2, 3, 4].map((bar) => (
-            <div
-              key={bar}
-              className={`w-1 rounded-full bg-primary transition-all duration-300 ${
-                isPlaying ? "animate-music-bar" : "h-1 opacity-50"
-              }`}
-              style={{
-                height: isPlaying ? "16px" : "4px",
-                animationDelay: `${bar * 0.1}s`, // Desfasamento para parecer aleatório
-              }}
-            />
-          ))}
+        
+        {/* --- ESTADO FECHADO (Apenas Ícone) --- */}
+        <div className={`absolute transition-opacity duration-300 ${isHovered || isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+           <Volume2 size={20} className="text-primary animate-pulse" />
         </div>
 
-        {/* Texto e Ícone (Revelados na expansão) */}
-        <div 
-          className={`absolute left-14 flex items-center gap-2 whitespace-nowrap transition-all duration-500 ${
-            isHovered || isPlaying ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
-          }`}
-        >
-          <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-black">
-            {isPlaying ? "Sound On" : "Sound Off"}
-          </span>
-        </div>
+        {/* --- ESTADO ABERTO (Controles) --- */}
+        <div className={`flex w-full items-center gap-4 transition-opacity duration-500 ${isHovered || isPlaying ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          
+          {/* Botão Play/Pause */}
+          <button 
+            onClick={(e) => { e.stopPropagation(); togglePlay(); }}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+          >
+            {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" className="ml-1" />}
+          </button>
 
-        {/* Ícone Fallback se não estiver expandido (Opcional, mas bom para UX) */}
-        <div className={`absolute right-3.5 transition-opacity duration-300 ${isHovered || isPlaying ? 'opacity-0' : 'opacity-100'}`}>
-           {isPlaying ? <Volume2 size={16} className="text-primary" /> : <VolumeX size={16} className="text-gray-500" />}
-        </div>
-      </button>
+          {/* Info e Barra de Progresso */}
+          <div className="flex flex-col flex-grow gap-1 w-full overflow-hidden">
+            
+            {/* Título e Tempo */}
+            <div className="flex justify-between items-end text-[10px] font-bold uppercase tracking-wider text-gray-400">
+               <span className="text-white truncate max-w-[80px]">Senna Theme</span>
+               <span>{formatTime(currentTime)} / {formatTime(duration)}</span>
+            </div>
 
-      {/* Styles Injetados para a animação das barras */}
-      <style>{`
-        @keyframes music-bar {
-          0%, 100% { height: 8px; opacity: 0.6; }
-          50% { height: 20px; opacity: 1; }
-        }
-        .animate-music-bar {
-          animation: music-bar 0.8s ease-in-out infinite;
-        }
-      `}</style>
+            {/* Input Range (Barra de Progresso) */}
+            <div className="relative h-1.5 w-full group/slider">
+               {/* Background da barra */}
+               <div className="absolute top-0 left-0 h-full w-full rounded-full bg-white/20"></div>
+               
+               {/* Barra de preenchimento (Visual) */}
+               <div 
+                 className="absolute top-0 left-0 h-full rounded-full bg-primary transition-all duration-100 ease-linear"
+                 style={{ width: `${(currentTime / duration) * 100}%` }}
+               ></div>
+
+               {/* Input Range invisível por cima para interação */}
+               <input
+                 type="range"
+                 min="0"
+                 max={duration || 0}
+                 step="0.1"
+                 value={currentTime}
+                 onChange={handleSeek}
+                 className="absolute top-[-5px] left-0 h-4 w-full cursor-pointer opacity-0 z-10"
+               />
+            </div>
+          </div>
+
+          {/* Botão Mute */}
+          <button 
+             onClick={(e) => { e.stopPropagation(); toggleMute(); }}
+             className="text-gray-400 hover:text-white transition-colors"
+          >
+             {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+          </button>
+
+        </div>
+      </div>
     </div>
   );
 };
