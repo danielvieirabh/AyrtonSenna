@@ -6,40 +6,40 @@
 
 @layer base {
   :root {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
 
-    --card: 0 0% 6%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
 
-    --popover: 0 0% 6%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
 
-    --primary: 43 74% 49%;
-    --primary-foreground: 0 0% 4%;
+    --primary: 0 84.2% 60.2%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
 
-    --accent: 43 74% 49%;
-    --accent-foreground: 0 0% 4%;
+    --accent: 0 84.2% 60.2%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 43 74% 49%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 84.2% 60.2%;
 
     --radius: 0rem;
 
     /* Custom tokens */
-    --hero-gradient: linear-gradient(180deg, hsla(0, 0%, 0%, 0) 0%, hsla(0, 0%, 4%, 0.8) 60%, hsl(0, 0%, 4%) 100%);
-    --vignette: radial-gradient(ellipse at center, transparent 0%, hsla(0, 0%, 0%, 0.7) 100%);
-    --gold-glow: 0 0 60px hsla(43, 74%, 49%, 0.15);
+    --hero-gradient: linear-gradient(180deg, hsla(0, 0%, 100%, 0) 0%, hsla(0, 0%, 100%, 0.8) 60%, hsl(0, 0%, 100%) 100%);
+    --vignette: radial-gradient(ellipse at center, transparent 0%, hsla(0, 0%, 0%, 0.2) 100%);
+    --gold-glow: 0 0 60px hsla(0, 84.2%, 60.2%, 0.15);
     
     /* Typography */
     --font-display: 'Bebas Neue', sans-serif;
@@ -51,8 +51,8 @@
   }
 
   .dark {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
   }
 }
 
@@ -68,6 +68,20 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
+
+    /* --- ADICIONADO: FUNDO COM LINHAS TOPOGRÁFICAS GLOBAIS --- */
+    background-color: #F9F9F9; /* Cor base levemente off-white */
+    
+    /* SVG Data URI com as curvas topográficas (Preto com baixa opacidade) */
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 C 25 50 75 50 100 0 S 150 0 200 0' stroke='%23000000' stroke-width='0.5' fill='none' opacity='0.05'/%3E%3Cpath d='M0 20 C 25 70 75 70 100 20 S 150 20 200 20' stroke='%23000000' stroke-width='0.5' fill='none' opacity='0.05'/%3E%3Cpath d='M0 40 C 25 90 75 90 100 40 S 150 40 200 40' stroke='%23000000' stroke-width='0.5' fill='none' opacity='0.05'/%3E%3Cpath d='M0 60 C 25 110 75 110 100 60 S 150 60 200 60' stroke='%23000000' stroke-width='0.5' fill='none' opacity='0.05'/%3E%3Cpath d='M0 80 C 25 130 75 130 100 80 S 150 80 200 80' stroke='%23000000' stroke-width='0.5' fill='none' opacity='0.05'/%3E%3C/svg%3E");
+    
+    background-repeat: repeat;
+    background-size: 300px 300px;
+    background-position: center;
+    background-attachment: fixed; /* O segredo: as linhas ficam fixas enquanto o site rola */
+
+    /* --- ADICIONADO: ANIMAÇÃO SUTIL DE MOVIMENTO --- */
+    animation: topo-flow 80s linear infinite;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -77,6 +91,17 @@
 }
 
 @layer components {
+  /* Mantive o efeito Grain original, pois ele adiciona textura extra */
+  @keyframes topo-flow {
+    0% {
+      background-position: 0px 0px;
+    }
+    100% {
+      /* Anima o deslocamento em um tile completo para um loop perfeito */
+      background-position: -300px -300px;
+    }
+  }
+
   .grain {
     position: fixed;
     top: -50%;

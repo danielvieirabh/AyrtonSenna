@@ -1,31 +1,31 @@
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
-// Configuração dos dados
+// Configuração dos dados Oficiais do Senna
 const stats = [
   { 
-    number: 900, 
-    suffix: "+", 
-    label: "Gols Oficiais", 
-    subtext: "Maior artilheiro da história" 
+    number: 3, 
+    suffix: "x", 
+    label: "World Champion", 
+    subtext: "1988, 1990, 1991" 
   },
   { 
-    number: 5, 
+    number: 41, 
     suffix: "", 
-    label: "Ballon d'Or", 
-    subtext: "Melhor do Mundo" 
+    label: "Grand Prix Wins", 
+    subtext: "Vitórias na Carreira" 
   },
   { 
-    number: 5, 
+    number: 65, 
     suffix: "", 
-    label: "Champions League", 
-    subtext: "Mr. Champions" 
+    label: "Pole Positions", 
+    subtext: "O Rei da Classificação" 
   },
   { 
-    number: 36, 
-    suffix: "+", 
-    label: "Títulos", 
-    subtext: "Coletivos e Seleção" 
+    number: 161, 
+    suffix: "", 
+    label: "Race Starts", 
+    subtext: "Grandes Prêmios Disputados" 
   },
 ];
 
@@ -46,11 +46,9 @@ const StatItem = ({ number, label, suffix = "", subtext, delay = 0 }: StatItemPr
 
     let start = 0;
     const end = number;
-    const duration = 2000; // 2 segundos
-    const incrementTime = (duration / end) * 1.5; // Ajuste de velocidade
-
-    // Para números pequenos, vai mais devagar. Para grandes, mais rápido.
-    const step = end > 100 ? Math.ceil(end / 100) : 1; 
+    // Animação mais rápida para parecer dados digitais
+    const duration = 1500; 
+    const step = end > 50 ? Math.ceil(end / 50) : 1; 
 
     const timer = setInterval(() => {
       start += step;
@@ -60,7 +58,7 @@ const StatItem = ({ number, label, suffix = "", subtext, delay = 0 }: StatItemPr
       } else {
         setCount(start);
       }
-    }, end > 100 ? 20 : 100);
+    }, 30);
 
     return () => clearInterval(timer);
   }, [isVisible, number]);
@@ -68,26 +66,36 @@ const StatItem = ({ number, label, suffix = "", subtext, delay = 0 }: StatItemPr
   return (
     <div
       ref={ref}
-      className={`group relative flex flex-col items-center justify-center py-12 md:py-24 transition-all duration-700 hover:bg-[#111] ${
+      // Borda preta fina e fundo branco para visual "papel técnico"
+      className={`group relative flex flex-col items-center justify-center py-16 md:py-28 transition-all duration-500 hover:bg-black/5 ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
       }`}
       style={{ transitionDelay: `${delay}ms` }}
     >
-      {/* Glow Effect no Hover */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#D4AF37]/0 via-[#D4AF37]/5 to-[#D4AF37]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      {/* Detalhe Técnico (Canto Superior) */}
+      <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-primary w-4 h-4">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+         </svg>
+      </div>
 
       {/* Número Principal */}
-      <div className="relative z-10 font-display font-black text-6xl md:text-8xl lg:text-9xl text-white tracking-tighter tabular-nums group-hover:text-[#D4AF37] transition-colors duration-300">
-        {count}
-        <span className="text-[#D4AF37] text-4xl md:text-6xl align-top ml-1 group-hover:text-white transition-colors">{suffix}</span>
+      <div className="relative z-10 flex items-baseline gap-1">
+        <span className="font-display font-black text-7xl md:text-8xl lg:text-9xl text-black tracking-tighter tabular-nums group-hover:text-primary transition-colors duration-300 italic">
+          {count}
+        </span>
+        <span className="font-display text-primary text-4xl md:text-5xl font-bold group-hover:text-black transition-colors italic">
+            {suffix}
+        </span>
       </div>
 
       {/* Label */}
-      <div className="relative z-10 mt-4 flex flex-col items-center gap-1">
-        <span className="font-serif text-lg md:text-xl text-white font-bold uppercase tracking-wider">
+      <div className="relative z-10 mt-2 flex flex-col items-center gap-2">
+        <div className="h-[2px] w-12 bg-primary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center" />
+        <span className="font-display text-2xl md:text-3xl text-black font-bold uppercase tracking-tight italic">
           {label}
         </span>
-        <span className="font-sans text-[10px] md:text-xs text-gray-500 uppercase tracking-[0.2em] group-hover:text-[#D4AF37] transition-colors">
+        <span className="font-sans text-[10px] md:text-xs text-gray-500 uppercase tracking-[0.2em] font-medium">
           {subtext}
         </span>
       </div>
@@ -99,17 +107,21 @@ const StatsSection = () => {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="relative bg-black text-white overflow-hidden border-t border-white/10">
+    <section className="relative bg-white text-black overflow-hidden border-t border-black/10">
       
-      {/* 1. BACKGROUND TEXTURE (Linhas Técnicas) */}
-      <div className="absolute inset-0 opacity-[0.05] pointer-events-none">
+      {/* 1. BACKGROUND TEXTURE (Grid Técnico) */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-multiply">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-           <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="0.5"/>
-           </pattern>
+           <defs>
+             <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+               <path d="M 10 0 L 0 0 0 10" fill="none" stroke="black" strokeWidth="0.5"/>
+             </pattern>
+             <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+               <rect width="100" height="100" fill="url(#smallGrid)"/>
+               <path d="M 100 0 L 0 0 0 100" fill="none" stroke="black" strokeWidth="1"/>
+             </pattern>
+           </defs>
            <rect width="100%" height="100%" fill="url(#grid)" />
-           {/* Linhas Curvas */}
-           <path d="M-100,200 Q 600,800 1200,100 T 2000,500" fill="none" stroke="#D4AF37" strokeWidth="1" />
         </svg>
       </div>
 
@@ -120,21 +132,21 @@ const StatsSection = () => {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         }`}
       >
-        <div className="inline-flex items-center gap-4 mb-4">
-           <div className="h-[1px] w-12 bg-[#D4AF37]" />
-           <span className="font-sans text-xs font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
-             The Numbers
+        <div className="inline-flex items-center gap-3 mb-4 border border-black/10 px-4 py-1 rounded-full bg-white">
+           <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+           <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-gray-500">
+             Career Telemetry
            </span>
-           <div className="h-[1px] w-12 bg-[#D4AF37]" />
         </div>
-        <h2 className="font-serif text-4xl md:text-6xl text-white uppercase">
-          Estatísticas <span className="italic text-gray-600">Lendárias</span>
+        
+        <h2 className="font-display text-5xl md:text-7xl text-black uppercase italic tracking-tighter">
+          THE <span className="text-primary">NUMBERS</span>
         </h2>
       </div>
 
       {/* 3. GRID DE ESTATÍSTICAS */}
-      <div className="container mx-auto px-0 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-white/10 border-b border-white/10">
+      <div className="container mx-auto px-0 relative z-10 border-t border-b border-black/10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-black/10">
           {stats.map((stat, index) => (
             <StatItem
               key={stat.label}
@@ -145,8 +157,17 @@ const StatsSection = () => {
         </div>
       </div>
 
-      {/* 4. RODAPÉ DECORATIVO DA SEÇÃO */}
-      <div className="w-full h-2 bg-gradient-to-r from-black via-[#D4AF37] to-black opacity-50" />
+      {/* 4. RODAPÉ DECORATIVO (Barra de Progresso Fake) */}
+      <div className="w-full h-1 bg-gray-100 relative overflow-hidden">
+        <div className="absolute inset-0 bg-primary w-1/3 animate-[loading-bar_3s_ease-in-out_infinite]" />
+      </div>
+      <style>{`
+        @keyframes loading-bar {
+          0% { transform: translateX(-100%); }
+          50% { transform: translateX(100%); }
+          100% { transform: translateX(300%); }
+        }
+      `}</style>
     </section>
   );
 };

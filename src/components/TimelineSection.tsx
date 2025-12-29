@@ -1,79 +1,92 @@
 import { useRef, useEffect, useState } from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { ArrowRight, Trophy } from "lucide-react"; // Certifique-se de ter lucide-react instalado ou use ícones similares
-import cr7Normal from "@/assets/cr7normal.png"; // Exemplo, mantenha seus imports
-import cr72002 from "@/assets/2002.jpg";
-import cr72003 from "@/assets/2003.jpg";
-import cr72008 from "@/assets/2008.jpg";
-import cr72009 from "@/assets/2009.jpg";
-import cr72016 from "@/assets/2016.jpg";
-import cr72018 from "@/assets/2018.webp";
-import cr72023 from "@/assets/2023.jpg";
+import { ArrowRight, Trophy, Flag, Timer } from "lucide-react";
 
+import senna1984 from "@/assets/senna1984.jpg"; 
+import senna1985 from "@/assets/ayrtonsennaimola1985.jpg"; 
+import senna1988 from "@/assets/f1-japanese-gp-1988-podium-win.jpg";
+import senna1990 from "@/assets/canada90-1.jpg";
+import senna1991 from "@/assets/1991camp.jpeg";
+import senna1993 from "@/assets/Senna-Prost-F1.webp";
+import senna1994 from "@/assets/morte.avif";
+
+// --- DADOS DA CARREIRA DE SENNA ---
 const timelineData = [
   {
-    year: "2002",
-    title: "O Início",
-    team: "Sporting CP",
-    image: cr72002,
-    stats: "31 Jogos | 5 Gols",
-    desc: "A estreia profissional que apresentou um prodígio ao mundo.",
+    year: "1984",
+    title: "O Prodígio na Chuva",
+    team: "Toleman-Hart",
+    image: senna1984, // Substitua por foto da Toleman/Monaco 84
+    stats: "GP de Mônaco (2º Lugar)",
+    desc: "Sua estreia na F1 e a lendária performance sob chuva em Mônaco que chocou o mundo.",
+    icon: <Flag size={18} />
   },
   {
-    year: "2003",
-    title: "Teatro dos Sonhos",
-    team: "Manchester United",
-    image: cr72003,
-    stats: "292 Jogos | 118 Gols",
-    desc: "Herdando a lendária camisa 7 e conquistando a Inglaterra.",
+    year: "1985",
+    title: "Primeira Vitória",
+    team: "Lotus-Renault",
+    image: senna1985, // Substitua por foto da Lotus JPS (Estoril)
+    stats: "GP de Portugal (Estoril)",
+    desc: "Debaixo de um dilúvio, Ayrton conquista sua primeira vitória com uma volta de vantagem sobre o terceiro.",
+    icon: <Trophy size={18} />
   },
   {
-    year: "2008",
-    title: "No Topo do Mundo",
-    team: "Manchester United",
-    image: cr72008,
-    stats: "Ballon d'Or Winner",
-    desc: "A primeira Champions League e o primeiro prêmio de Melhor do Mundo.",
+    year: "1988",
+    title: "O Primeiro Mundial",
+    team: "McLaren-Honda",
+    image: senna1988, // Substitua por foto da MP4/4
+    stats: "8 Vitórias | 13 Poles",
+    desc: "A bordo do imbatível MP4/4, Senna derrota Prost no Japão e conquista seu primeiro título.",
+    icon: <Trophy size={18} className="text-yellow-500" />
   },
   {
-    year: "2009",
-    title: "Galáctico",
-    team: "Real Madrid",
-    image: cr72009,
-    stats: "438 Jogos | 450 Gols",
-    desc: "Uma transferência recorde para reescrever a história do futebol.",
+    year: "1990",
+    title: "Bicampeão",
+    team: "McLaren-Honda",
+    image: senna1990, // Substitua por foto da Batida com Prost
+    stats: "6 Vitórias | 10 Poles",
+    desc: "Uma revanche histórica contra Prost em Suzuka garante o segundo campeonato mundial.",
+    icon: <Trophy size={18} className="text-yellow-500" />
   },
   {
-    year: "2016",
-    title: "Glória Nacional",
-    team: "Portugal",
-    image: cr72016,
-    stats: "Campeão da Euro",
-    desc: "Liderando Portugal à conquista inédita da Eurocopa contra a França.",
+    year: "1991",
+    title: "O Tri em Interlagos",
+    team: "McLaren-Honda",
+    image: senna1991 , // Substitua por foto da Vitória no Brasil
+    stats: "Vitória Épica no Brasil",
+    desc: "Com apenas a sexta marcha nas voltas finais, Senna vence em casa e sela o tricampeonato no fim do ano.",
+    icon: <Trophy size={18} className="text-yellow-500" />
   },
   {
-    year: "2018",
-    title: "Novo Desafio",
-    team: "Juventus",
-    image: cr72018,
-    stats: "134 Jogos | 101 Gols",
-    desc: "Dominando a Itália e continuando a quebrar recordes de artilharia.",
+    year: "1993",
+    title: "Volta dos Deuses",
+    team: "McLaren-Ford",
+    image: senna1993, // Substitua por foto de Donington
+    stats: "GP da Europa (Donington)",
+    desc: "A melhor primeira volta da história da F1, ultrapassando 4 carros na chuva para liderar.",
+    icon: <Timer size={18} />
   },
   {
-    year: "2023",
-    title: "Revolução",
-    team: "Al Nassr",
-    image: cr72023,
-    stats: "Líder da Liga Saudita",
-    desc: "Pioneiro na transformação do futebol no Oriente Médio.",
+    year: "1994",
+    title: "O Legado Eterno",
+    team: "Williams-Renault",
+    image: senna1994, // Substitua por foto do Capacete
+    stats: "65 Poles Totais",
+    desc: "Sua busca pela perfeição e velocidade pura continua inspirando gerações até hoje.",
+    icon: <Flag size={18} />
   },
 ];
 
 const TimelineSection = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef(null);
+  const trackRef = useRef(null);
   const [progress, setProgress] = useState(0);
   const { ref: animRef, isVisible } = useScrollAnimation({ threshold: 0.1 });
+
+  // Cor principal do tema (ex: Amarelo Senna ou Verde Nacional)
+  const accentColor = "text-[#FEDD00]"; 
+  const accentBg = "bg-[#FEDD00]";
+  const accentBorder = "border-[#FEDD00]";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -82,7 +95,6 @@ const TimelineSection = () => {
       const { top, height } = sectionRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       
-      // Controla a velocidade do scroll horizontal em relação ao vertical
       const scrollDistance = height - windowHeight;
       const scrolled = -top;
       
@@ -99,96 +111,96 @@ const TimelineSection = () => {
   return (
     <section 
       ref={sectionRef} 
-      className="relative h-[400vh] bg-black text-white" 
+      className="relative h-[400vh] bg-white text-black font-sans" 
     >
       <div 
         ref={animRef}
         className={`sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center transition-all duration-1000 ease-out ${isVisible ? "opacity-100" : "opacity-0"}`}
       >
         
-        {/* --- Background Elements (Linhas Técnicas) --- */}
-        <div className="absolute inset-0 pointer-events-none opacity-20">
-            <div className="absolute top-20 left-0 w-full h-px bg-white/20"></div>
-            <div className="absolute bottom-20 left-0 w-full h-px bg-white/20"></div>
-            <div className="absolute left-10 top-0 h-full w-px bg-white/10 border-r border-dashed border-white/20"></div>
+        {/* --- Background Elements (Pista / Curvas) --- */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.05]">
+           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0,500 Q 400,100 800,500 T 1600,500" fill="none" stroke="black" strokeWidth="2" />
+           </svg>
+           <div className="absolute top-0 right-20 h-full w-px bg-black/10"></div>
         </div>
 
         {/* --- Header Fixo --- */}
-        <div className="absolute top-12 left-6 md:left-24 z-20">
+        <div className="absolute top-8 left-6 md:left-24 z-20">
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-8 h-1 bg-[#D4AF37]"></div>
-            <span className="font-sans text-xs font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
-              Legacy Timeline
+            <div className={`w-12 h-[2px] ${accentBg}`}></div>
+            <span className={`font-sans text-xs font-bold uppercase tracking-[0.3em] ${accentColor}`}>
+              Career Timeline
             </span>
           </div>
-          <h2 className="font-serif text-4xl md:text-6xl text-white">
-            A JORNADA
+          <h2 className="font-serif italic text-5xl md:text-7xl text-black leading-none">
+            A BUSCA PELA <br/> PERFEIÇÃO
           </h2>
         </div>
 
         {/* --- Horizontal Track --- */}
         <div 
           ref={trackRef}
-          className="flex gap-4 md:gap-12 px-6 md:px-24 w-max items-center will-change-transform"
+          className="flex gap-8 md:gap-24 px-6 md:px-24 w-max items-center will-change-transform mt-20"
           style={{ 
-            // Movimento horizontal suave
-            transform: `translateX(calc(10vw - ${progress * (timelineData.length * 70)}vh))` 
+            transform: `translateX(calc(10vw - ${progress * (timelineData.length * 75)}vh))` 
           }}
         >
           {timelineData.map((item, index) => (
             <div 
               key={index} 
-              className="relative w-[85vw] md:w-[45vh] lg:w-[50vh] flex-shrink-0 group cursor-pointer"
+              className="relative w-[85vw] md:w-[50vh] flex-shrink-0 group cursor-pointer"
             >
-              {/* Layout do Card */}
               <div className="relative flex flex-col gap-6">
                 
-                {/* 1. Imagem (Container Vertical 3:4 para não cortar rosto) */}
-                <div className="relative aspect-[3/4] overflow-hidden border border-white/10 bg-[#111]">
-                   {/* Overlay de carregamento/fundo */}
-                   <div className="absolute inset-0 z-0 bg-[#1a1a1a]" />
+                {/* 1. Imagem (Cartão Vertical) */}
+                <div className="relative aspect-[4/5] overflow-hidden bg-gray-100 shadow-xl group-hover:shadow-2xl transition-shadow duration-500">
+                   {/* Overlay Amarelo no Hover */}
+                   <div className={`absolute inset-0 z-10 ${accentBg} mix-blend-multiply opacity-0 group-hover:opacity-40 transition-opacity duration-500`} />
                    
-                   {/* Imagem com efeito Zoom e Grayscale -> Color */}
                    <img
                      src={item.image}
                      alt={item.title}
-                     className="absolute inset-0 z-10 h-full w-full object-cover object-top transition-all duration-700 ease-out filter grayscale hover:grayscale-0 hover:scale-110"
+                     className="absolute inset-0 z-0 h-full w-full object-cover filter grayscale contrast-125 transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
                    />
                    
-                   {/* Data/Ano Gigante (Outline) sobrepondo a imagem */}
-                   <div className="absolute -top-10 -left-2 z-20 pointer-events-none mix-blend-difference">
+                   {/* Ano Vazado (Estilo Racing Number) */}
+                   <div className="absolute -top-12 -left-4 z-20 pointer-events-none mix-blend-difference">
                       <span 
-                        className="font-display text-[6rem] md:text-[8rem] font-black leading-none text-transparent"
-                        style={{ WebkitTextStroke: "1px rgba(255,255,255,0.5)" }}
+                        className="font-display text-[7rem] md:text-[9rem] font-black leading-none text-white opacity-20 group-hover:opacity-100 transition-opacity duration-500"
+                        style={{ WebkitTextStroke: "0px" }}
                       >
                         {item.year}
                       </span>
                    </div>
 
-                   {/* Ícone de Troféu flutuante no hover */}
-                   <div className="absolute top-4 right-4 z-20 translate-y-[-20px] opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                      <div className="rounded-full bg-[#D4AF37] p-2 text-black">
-                        <Trophy size={20} />
-                      </div>
+                   {/* Ícone no Canto */}
+                   <div className={`absolute bottom-0 right-0 p-4 bg-white z-20 ${accentColor}`}>
+                      {item.icon}
                    </div>
                 </div>
 
                 {/* 2. Informações */}
-                <div className="flex flex-col border-l-2 border-[#D4AF37] pl-4 transition-all duration-300 group-hover:border-white">
-                  <span className="mb-1 text-xs font-bold uppercase tracking-widest text-[#D4AF37]">
-                    {item.team}
-                  </span>
-                  <h3 className="mb-2 font-serif text-2xl md:text-3xl text-white group-hover:text-[#D4AF37] transition-colors">
+                <div className={`flex flex-col border-l-4 ${accentBorder} pl-6 transition-all duration-300 group-hover:pl-8`}>
+                  <div className="flex items-center gap-2 mb-2">
+                     <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500 bg-gray-100 px-2 py-1">
+                       {item.team}
+                     </span>
+                  </div>
+                  
+                  <h3 className="mb-3 font-display font-bold text-3xl md:text-4xl text-black leading-[0.9] uppercase">
                     {item.title}
                   </h3>
-                  <p className="text-sm leading-relaxed text-gray-400 max-w-sm">
-                    {item.desc}
+                  
+                  <p className="font-serif italic text-gray-600 text-lg leading-relaxed max-w-sm mb-4">
+                    "{item.desc}"
                   </p>
                   
                   {/* Stats Badge */}
-                  <div className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-white/60 group-hover:text-white transition-colors">
+                  <div className="flex items-center gap-2 text-xs font-bold text-black border-t border-gray-200 pt-3 mt-auto">
+                    <Trophy size={14} className={accentColor} />
                     <span>{item.stats}</span>
-                    <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                   </div>
                 </div>
 
@@ -198,15 +210,14 @@ const TimelineSection = () => {
         </div>
 
         {/* --- Progress Bar Inferior --- */}
-        <div className="absolute bottom-12 left-6 right-6 md:left-24 md:right-24">
-           <div className="flex justify-between text-[10px] uppercase tracking-widest text-gray-500 mb-2">
-              <span>Start</span>
-              <span>2002 — 2023</span>
-              <span>Present</span>
+        <div className="absolute bottom-12 left-6 right-6 md:left-24 md:right-24 z-20">
+           <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
+             <span>Start: 1984</span>
+             <span>Legacy Forever</span>
            </div>
-           <div className="h-[2px] w-full bg-white/10">
+           <div className="h-[4px] w-full bg-gray-200 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-[#D4AF37] transition-all duration-100 ease-linear shadow-[0_0_10px_#D4AF37]"
+                className={`h-full ${accentBg}`}
                 style={{ width: `${progress * 100}%` }}
               />
            </div>

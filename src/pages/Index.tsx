@@ -13,10 +13,10 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>CR7 | A Disciplina Vence o Talento</title>
+        <title>Ayrton Senna | A Lenda do Brasil</title>
         <meta 
           name="description" 
-          content="A mentalidade que forjou o maior de todos os tempos. Descubra a jornada de Cristiano Ronaldo." 
+          content="A mentalidade que forjou o maior de todos os tempos. Descubra a jornada de Ayrtos Senna." 
         />
       </Helmet>
       <main className="bg-background">
